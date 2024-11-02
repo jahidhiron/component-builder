@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Styles for the sidebar items as cards */
+.sidebar-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sidebar-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Styles for canvas drop area */
+.canvas-container {
+  background-color: #f7fafc;
+}
+
+.drop-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.drop-area:hover {
+  background-color: #e2e8f0;
+}
+
+/* Styles for each item added to the canvas */
+.canvas-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.canvas-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.full-width-block {
+  display: block;
+  width: 100%;
+  box-sizing: border-box; /* Ensures padding doesn't overflow */
+}
+
+.customizer label {
+  font-weight: bold;
+  margin-bottom: 4px;
+  display: block;
+}
+.customizer input,
+.customizer select {
+  margin-bottom: 12px;
+}
+
+.customizer {
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.customizer-hidden {
+  opacity: 0;
+  visibility: hidden;
+}
