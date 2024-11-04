@@ -63,3 +63,8 @@
   opacity: 0;
   visibility: hidden;
 }
+
+.canvas-container .actions button {
+  position: relative;
+  z-index: 1000; /* Set a high z-index to ensure they stay on top */
+}

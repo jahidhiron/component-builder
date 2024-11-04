@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import MainLayout from "../layouts/Layout";
@@ -9,8 +9,10 @@ import { useHistory } from "../hooks/useHistory";
 import componentsData from "../data/subComponents.json";
 
 function Editor() {
-  const [selectedComponent, setSelectedComponent] = useState(null);
+  const [selectedComponentId, setSelectedComponentId] = useState(null);
   const { history, addToHistory, undo, redo, canUndo, canRedo } = useHistory();
+
+  const prevHistoryRef = useRef(history);
 
   useEffect(() => {
     const savedState = JSON.parse(localStorage.getItem("canvasState")) || [];
@@ -19,13 +21,32 @@ function Editor() {
 
   useEffect(() => {
     localStorage.setItem("canvasState", JSON.stringify(history));
-    if (history.length > 0) {
-      const latestComponent = history[history.length - 1];
-      setSelectedComponent(latestComponent);
-    } else {
-      setSelectedComponent(null);
+
+    const prevHistory = prevHistoryRef.current;
+    if (prevHistory !== history) {
+      const modifiedComponent = findModifiedComponent(prevHistory, history);
+      if (modifiedComponent) {
+        setSelectedComponentId(modifiedComponent.id);
+      }
     }
+
+    prevHistoryRef.current = history;
   }, [history]);
+
+  const findModifiedComponent = (prevHistory, currentHistory) => {
+    for (let i = 0; i < currentHistory.length; i++) {
+      const prevComponent = prevHistory[i];
+      const currentComponent = currentHistory[i];
+
+      if (
+        !prevComponent ||
+        JSON.stringify(prevComponent) !== JSON.stringify(currentComponent)
+      ) {
+        return currentComponent;
+      }
+    }
+    return null;
+  };
 
   const addComponent = (component) => {
     const newComponent = {
@@ -38,7 +59,7 @@ function Editor() {
     };
     const updatedComponents = [...history, newComponent];
     addToHistory(updatedComponents);
-    setSelectedComponent(newComponent);
+    setSelectedComponentId(newComponent.id);
   };
 
   const updateComponent = useCallback(
@@ -47,10 +68,21 @@ function Editor() {
         comp.id === updatedComponent.id ? updatedComponent : comp
       );
       addToHistory(updatedComponents);
-      setSelectedComponent(updatedComponent);
+      setSelectedComponentId(updatedComponent.id);
     },
     [history, addToHistory]
   );
+
+  const handleUndo = () => {
+    undo();
+  };
+
+  const handleRedo = () => {
+    redo();
+  };
+
+  const selectedComponent =
+    history.find((comp) => comp.id === selectedComponentId) || null;
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -58,10 +90,12 @@ function Editor() {
         <Sidebar components={componentsData} onAddComponent={addComponent} />
         <Canvas
           components={history}
-          setSelectedComponent={setSelectedComponent}
+          setSelectedComponent={(component) =>
+            setSelectedComponentId(component.id)
+          }
           onAddComponent={addComponent}
-          undo={undo}
-          redo={redo}
+          undo={handleUndo}
+          redo={handleRedo}
           canUndo={canUndo}
           canRedo={canRedo}
         />

@@ -24,6 +24,7 @@ const Canvas = ({
           onClick={undo}
           disabled={!canUndo}
           className="mr-2 p-2 bg-gray-200 rounded disabled:opacity-50"
+          style={{ position: "relative", zIndex: 1000 }}
         >
           Undo
         </button>
@@ -31,6 +32,7 @@ const Canvas = ({
           onClick={redo}
           disabled={!canRedo}
           className="p-2 bg-gray-200 rounded disabled:opacity-50"
+          style={{ position: "relative", zIndex: 1000 }}
         >
           Redo
         </button>
@@ -48,13 +50,20 @@ const Canvas = ({
               key={component.id}
               onClick={() => setSelectedComponent(component)}
               className="canvas-card p-4 bg-white shadow-md rounded-md mb-4 cursor-pointer full-width-block"
+              style={{
+                textAlign:
+                  component.componentInfo.attributes.style.textAlign || "left",
+              }}
             >
               {component.componentInfo.type === "button" ? (
                 <a
                   href={component.componentInfo.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={component.componentInfo.attributes.style}
+                  style={{
+                    ...component.componentInfo.attributes.style,
+                    display: "inline-block",
+                  }}
                   className="button-link"
                 >
                   {component.componentInfo.value ||

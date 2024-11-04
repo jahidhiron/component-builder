@@ -91,10 +91,34 @@ const Customizer = ({ selectedComponent, updateComponent }) => {
         <option value="Arial">Arial</option>
         <option value="Helvetica">Helvetica</option>
         <option value="Times New Roman">Times New Roman</option>
-        <option value="Courier New">Courier New</option>
         <option value="Georgia">Georgia</option>
       </select>
-      <label className="block mb-2">Font Color</label>
+
+      <label className="block mb-2">
+        Font Color:
+        <span
+          style={{
+            marginLeft: "8px",
+            display: "inline-block",
+            verticalAlign: "middle",
+          }}
+        >
+          <span
+            style={{
+              backgroundColor:
+                selectedComponent.componentInfo.attributes.style.color ||
+                "#000000",
+              width: "16px",
+              height: "16px",
+              display: "inline-block",
+              marginRight: "8px",
+              borderRadius: "4px",
+              border: "1px solid #ccc",
+            }}
+          ></span>
+          {selectedComponent.componentInfo.attributes.style.color || "#000000"}
+        </span>
+      </label>
       <input
         type="color"
         value={
@@ -102,17 +126,47 @@ const Customizer = ({ selectedComponent, updateComponent }) => {
         }
         onChange={(e) => handleStyleChange("color", e.target.value)}
         className="w-full p-2 border border-gray-300 rounded-md mb-4"
+        style={{ position: "relative", zIndex: 1100 }}
       />
-      <label className="block mb-2">Background Color</label>
+
+      <label className="block mb-2">
+        Background Color:
+        <span
+          style={{
+            marginLeft: "8px",
+            display: "inline-block",
+            verticalAlign: "middle",
+          }}
+        >
+          <span
+            style={{
+              backgroundColor:
+                selectedComponent.componentInfo.attributes.style
+                  .backgroundColor || "#FFFFFF",
+              width: "16px",
+              height: "16px",
+              display: "inline-block",
+              marginRight: "8px",
+              borderRadius: "4px",
+              border: "1px solid #ccc",
+            }}
+          ></span>
+          {selectedComponent.componentInfo.attributes.style.backgroundColor ||
+            "#FFFFFF"}
+        </span>
+      </label>
       <input
         type="color"
         value={
-          selectedComponent.componentInfo.attributes.style.backgroundColor || ""
+          selectedComponent.componentInfo.attributes.style.backgroundColor ||
+          "#FFFFFF"
         }
         onChange={(e) => handleStyleChange("backgroundColor", e.target.value)}
         className="w-full p-2 border border-gray-300 rounded-md mb-4"
+        style={{ position: "relative", zIndex: 1100 }}
       />
-      <label className="block mb-2">Text Alignment</label>
+
+      <label className="block mb-2">Alignment</label>
       <select
         value={
           selectedComponent.componentInfo.attributes.style.textAlign || "left"
@@ -124,6 +178,7 @@ const Customizer = ({ selectedComponent, updateComponent }) => {
         <option value="center">Center</option>
         <option value="right">Right</option>
       </select>
+
       {selectedComponent.componentInfo.type === "button" && (
         <div>
           <label className="block mb-2">Button Link</label>
